@@ -1,4 +1,6 @@
-IOS_CC = /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/gcc
+XCODE_PATH = $(shell xcode-select --print-path)
+IOS_CC = $(XCODE_PATH)/Platforms/iPhoneOS.platform/Developer/usr/bin/gcc
+SDK_PATH = $(shell find $(XCODE_PATH)/Platforms/iPhoneOS.platform -name "iPhoneOS*sdk" | sort -rn | head -1)
 
 all: demo.app fruitstrap
 
@@ -8,8 +10,6 @@ demo.app: demo Info.plist
 	cp Info.plist ResourceRules.plist demo.app/
 	codesign -f -s "iPhone Developer" --entitlements Entitlements.plist demo.app
 
-demo: demo.c
-	$(IOS_CC) -arch armv7 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk -framework CoreFoundation -o demo demo.c
 
 fruitstrap: fruitstrap.c
 	gcc -o fruitstrap -framework CoreFoundation -framework MobileDevice -F/System/Library/PrivateFrameworks fruitstrap.c
